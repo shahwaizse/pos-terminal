@@ -1,0 +1,1 @@
+Robust point-of-sales terminal built to understand the fundamentals of the Java programming language.
