@@ -1,0 +1,2 @@
+implement exception handling in itemmanager and customermanager classes using while(true) loops.
+implement salesReport() and outstandingSales() functions.
