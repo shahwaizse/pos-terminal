@@ -28,7 +28,14 @@ public class POS {
     public void itemMenu() {
         int choice = 0;
         while(choice != 5) {
-            choice = Integer.parseInt(JOptionPane.showInputDialog("1. Add item \n2. Update item \n3. Find item \n4. Remove existing item \n5. Back"));
+            while(true) {
+                try {
+                    choice = Integer.parseInt(JOptionPane.showInputDialog("1. Add new item \n2. Update item details \n3. Find item \n4. Remove existing item \n5. Back"));
+                    break;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid choice");
+                }
+            }
             switch (choice) {
                 case 1:
                     itemManager.addItem();
@@ -52,7 +59,14 @@ public class POS {
     public void customerMenu() {
         int choice = 0;
         while(choice != 5) {
-            choice = Integer.parseInt(JOptionPane.showInputDialog("1. Add new customer \n2. Update customer details \n3. Find customer \n4. Remove existing customer \n5. Back"));
+            while(true) {
+                try {
+                    choice = Integer.parseInt(JOptionPane.showInputDialog("1. Add new customer \n2. Update customer details \n3. Find customer \n4. Remove existing customer \n5. Back"));
+                    break;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid choice");
+                }
+            }
             switch (choice) {
                 case 1:
                     customerManager.addCustomer();
@@ -76,7 +90,14 @@ public class POS {
     public void reportsMenu() {
         int choice = 0;
         while(choice != 5) {
-            choice = Integer.parseInt(JOptionPane.showInputDialog("1. Stock in hand \n2. Outstanding orders \n3. Customer balance \n4. Sales Receipts \n5. Back"));
+            while(true) {
+                try {
+                    choice = Integer.parseInt(JOptionPane.showInputDialog("1. Stock in hand \n2. Outstanding sales \n3. Customer information \n4. Sales report \n5. Back"));
+                    break;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid choice");
+                }
+            }
             switch (choice) {
                 case 1:
                     reportsManager.stockInHand();
@@ -100,7 +121,14 @@ public class POS {
     public void mainMenu() {
         int choice = 0;
         while(choice != 6) {
-            choice = Integer.parseInt(JOptionPane.showInputDialog("1. Manage Items \n2. Manage Customers \n3. Make New Sale \n4. Make Payment \n5. Print Reports \n6. Exit"));
+            while(true) {
+                try {
+                    choice = Integer.parseInt(JOptionPane.showInputDialog("1. Item menu \n2. Customer menu \n3. New sale \n4. Make payment \n5. Reports \n6. Exit"));
+                    break;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid choice");
+                }
+            }
             switch (choice) {
                 case 1:
                     itemMenu();

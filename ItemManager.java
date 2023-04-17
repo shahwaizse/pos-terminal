@@ -49,19 +49,27 @@ public class ItemManager {
     public void addItem() {
         JOptionPane.showMessageDialog(null, "Item ID: " + id);
         String desc = JOptionPane.showInputDialog("Enter item description");
-        double price;
-        try {
-            price = Double.parseDouble(JOptionPane.showInputDialog("Enter item price"));
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid price. Price set to 0");
-            price = 0;
+        double price = 0;
+        while(true) {
+            try {
+                price = Double.parseDouble(JOptionPane.showInputDialog("Enter item price"));
+                if(price <= 0)
+                    throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid price");
+            }
         }
         int quantity;
-        try {
-            quantity = Integer.parseInt(JOptionPane.showInputDialog("Enter item quantity"));
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid quantity. Quantity set to 0");
-            quantity = 0;
+        while(true) {
+            try {
+                quantity = Integer.parseInt(JOptionPane.showInputDialog("Enter item quantity"));
+                if(quantity <= 0)
+                    throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid quantity");
+            }
         }
         Date date = new Date();
         Item item = new Item(id, desc, price, quantity, date);
@@ -71,11 +79,15 @@ public class ItemManager {
     }
     public void modifyItem() {
         int id;
-        try {
-            id = Integer.parseInt(JOptionPane.showInputDialog("Enter item id"));
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid id");
-            return;
+        while(true) {
+            try {
+                id = Integer.parseInt(JOptionPane.showInputDialog("Enter item id"));
+                if(id <= 0)
+                    throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid id");
+            }
         }
         for (Item item : items) {
             if (item.getId() == id) {

@@ -148,6 +148,11 @@ public class SalesManager {
                 JOptionPane.showMessageDialog(null, "Invalid customer id");
             }
         }
+        Customer currentCustomer = customers.getCustomer(customerId);
+        if (currentCustomer == null) {
+            JOptionPane.showMessageDialog(null, "Customer not found");
+            return;
+        }
         int itemId;
         while(true){
             try {
@@ -173,6 +178,9 @@ public class SalesManager {
                 "Items in stock: : " + items.getItem(itemId).getQuantity() + "\n" +
                 "Enter quantity: "
                 ));
+                if(quantity == 0) {
+                    JOptionPane.showMessageDialog(null, "Invalid quantity");
+                }
                 if(quantity > items.getItem(itemId).getQuantity()) {
                     JOptionPane.showMessageDialog(null, "Not enough items in stock.");
                 }
@@ -200,12 +208,20 @@ public class SalesManager {
             );
         }
         while(true){
-            int choice = Integer.parseInt(JOptionPane.showInputDialog(
-            "Press 1 to Enter New Item \n" +
-            "Press 2 to End Sale \n" +
-            "Press 3 to Remove an existing Item from the current sale \n" +
-            "Press 4 to Cancel Sale"
-            ));
+            int choice;
+            while(true) {
+                try {
+                    choice = Integer.parseInt(JOptionPane.showInputDialog(
+                        "Press 1 to Enter New Item \n" +
+                        "Press 2 to End Sale \n" +
+                        "Press 3 to Remove an existing Item from the current sale \n" +
+                        "Press 4 to Cancel Sale"
+                    ));
+                    break;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid choice");
+                }
+            }
             if (choice == 1) {
                 while(true){
                     try {
@@ -234,6 +250,9 @@ public class SalesManager {
                         "Items in stock: : " + items.getItem(itemId).getQuantity() + "\n" +
                         "Enter quantity: "
                         ));
+                        if(quantity == 0) {
+                            JOptionPane.showMessageDialog(null, "Invalid quantity");
+                        }
                         if(quantity > items.getItem(itemId).getQuantity()) {
                             JOptionPane.showMessageDialog(null, "Not enough items in stock.");
                         }
@@ -287,10 +306,12 @@ public class SalesManager {
                     table.getColumnModel().getColumn(2).setHeaderValue("Quantity");
                     table.getColumnModel().getColumn(3).setHeaderValue("Amount");
                     for (int i = 0; i < saleLineItems.size(); i++) {
-                        table.setValueAt(saleLineItems.get(i).getItemId(), i, 0);
-                        table.setValueAt(items.getItem(saleLineItems.get(i).getItemId()).getDesc(), i, 1);
-                        table.setValueAt(saleLineItems.get(i).getQuantity(), i, 2);
-                        table.setValueAt(saleLineItems.get(i).getAmount() * saleLineItems.get(i).getQuantity(), i, 3);
+                        if(saleLineItems.get(i).getOrderId() == id - 1) {
+                            table.setValueAt(saleLineItems.get(i).getItemId(), i, 0);
+                            table.setValueAt(items.getItem(saleLineItems.get(i).getItemId()).getDesc(), i, 1);
+                            table.setValueAt(saleLineItems.get(i).getQuantity(), i, 2);
+                            table.setValueAt(saleLineItems.get(i).getQuantity() * items.getItem(saleLineItems.get(i).getItemId()).getPrice(), i, 3);
+                        }
                     }
                     JOptionPane.showMessageDialog(null, new JScrollPane(table));
                     break;
@@ -307,7 +328,6 @@ public class SalesManager {
                 }
                 for (SaleLineItem sli : saleLineItems) {
                     if (sli.getItemId() == itemId && sli.getOrderId() == id) {
-                        saleLineItems.remove(sli);
                         subtotal -= sli.getQuantity() * items.getItem(sli.getItemId()).getPrice();
                         JOptionPane.showMessageDialog(
                             null,
@@ -323,14 +343,21 @@ public class SalesManager {
                             }
                         }
                         quantities.remove(itemId);
-                        quantities.put(itemId, 0);
+                        if(saleLineItems.remove(sli)) {
+                            JOptionPane.showMessageDialog(null, "Item removed from sale");
+                        }
                         break;
                     }
                 }
+                JOptionPane.showMessageDialog(null, "Item not found in sale");
             }
             else if (choice == 4) {
                 quantities.forEach((k, v) -> {
-                    items.items.get(k).setQuantity(items.items.get(k).getQuantity() + v);
+                    for(int i = 0; i < items.items.size(); i++) {
+                        if(items.items.get(i).getId() == k) {
+                            items.items.get(i).setQuantity(items.items.get(i).getQuantity() + v);
+                        }
+                    }
                 });
                 break;
             }
@@ -346,13 +373,20 @@ public class SalesManager {
                 JOptionPane.showMessageDialog(null, "Invalid sales id");
             }
         }
+        boolean check = false;
         for(int i = 0; i < sales.size(); i++) {
             if(sales.get(i).getOrderId() == salesId) {
                 if(sales.get(i).isStatus() == false) {
                     JOptionPane.showMessageDialog(null, "Sale already paid");
                     return;
                 }
+                check = true;
+                break;
             }
+        }
+        if(!check) {
+            JOptionPane.showMessageDialog(null, "Sale not found");
+            return;
         }
         String customerName = "";
         for(int i = 0; i < customers.customers.size(); i++) {

@@ -61,6 +61,9 @@ public class Customer {
     public double getBalance() {
         return salesLimit - amountPayable;
     }
+    public void setBalance(double balance) {
+        this.salesLimit = amountPayable + balance;
+    }
     @Override
     public String toString() {
         return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", phone=" + phone + ", email="

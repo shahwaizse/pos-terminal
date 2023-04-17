@@ -47,7 +47,15 @@ public class CustomerManager {
     }
     public void addCustomer() {
         JOptionPane.showMessageDialog(null, "Customer ID: " + id);
-        String name = JOptionPane.showInputDialog("Enter customer name");
+        String name;
+        while(true) {
+            name = JOptionPane.showInputDialog("Enter customer name");
+            if(name.equals("")) {
+                JOptionPane.showMessageDialog(null, "Invalid name");
+            } else {
+                break;
+            }
+        }
         String address = JOptionPane.showInputDialog("Enter customer address");
         int phone;
         try {
@@ -59,11 +67,15 @@ public class CustomerManager {
         String email = JOptionPane.showInputDialog("Enter customer email");
         double amountPayable = 0;
         double salesLimit;
-        try {
-            salesLimit = Double.parseDouble(JOptionPane.showInputDialog("Enter customer sales limit"));
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid sales limit. Sales limit set to 0");
-            salesLimit = 0;
+        while(true) {
+            try {
+                salesLimit = Double.parseDouble(JOptionPane.showInputDialog("Enter customer sales limit"));
+                if(salesLimit <= 0)
+                    throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid sales limit");
+            }
         }
         Customer customer = new Customer(id, name, address, phone, email, amountPayable, salesLimit);
         customers.add(customer);
